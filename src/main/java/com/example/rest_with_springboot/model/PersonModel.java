@@ -1,5 +1,6 @@
 package com.example.rest_with_springboot.model;
 
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,12 +11,20 @@ import java.util.Objects;
 @Getter
 @Setter
 @NoArgsConstructor
+@Entity
+@Table(name="person")
 public class PersonModel implements Serializable {
     private static final long serialVersionUID = 1L;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "name", nullable = false, length = 150)
     private String name;
+    @Column(name = "address", nullable = false, length = 150)
     private String address;
+    @Column(name = "gender",nullable = false, length = 30)
     private String gender;
 
     @Override

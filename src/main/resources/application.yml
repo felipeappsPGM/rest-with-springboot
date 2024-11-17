@@ -1,1 +1,20 @@
-spring.application.name=rest-with-springboot
+spring:
+  application:
+    name: rest-with-springboot
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/udemyspring
+    username: udemyspring
+    password: udemyspring
+
+  jpa:
+    show-sql: true
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    generate-ddl: true
+    defer-datasource-initialization: true
+
+server:
+  port: 8081
+  servlet:
+    context-path: /api
