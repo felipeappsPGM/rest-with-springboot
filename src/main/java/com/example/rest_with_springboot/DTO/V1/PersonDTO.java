@@ -25,7 +25,7 @@ public class PersonDTO extends RepresentationModel<PersonDTO> implements Seriali
     private String name;
     //@JsonIgnore // usado para NÃOOOO ser enviado no serializer
     private String address;
-
+    private String gender;
     public PersonDTO() {
     }
 
@@ -50,7 +50,7 @@ public class PersonDTO extends RepresentationModel<PersonDTO> implements Seriali
         return Objects.hash(super.hashCode(), key, name, address, gender);
     }
 
-    private String gender;
+
 
     public void setKey(Long key) {
         this.key = key;

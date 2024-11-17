@@ -1,6 +1,7 @@
 package com.example.rest_with_springboot.exceptions.handler;
 
 import com.example.rest_with_springboot.exceptions.ExceptionsResponse;
+import com.example.rest_with_springboot.exceptions.RequiredIsNullException;
 import com.example.rest_with_springboot.exceptions.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,5 +38,16 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
                 request.getDescription(false)
         );
         return new ResponseEntity<>(exceptionsResponse, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(RequiredIsNullException.class)
+    public final ResponseEntity<ExceptionsResponse> handlerBadRequestExceptions(Exception ex, WebRequest request){
+
+        ExceptionsResponse exceptionsResponse = new ExceptionsResponse(
+                new Date(),
+                ex.getMessage(),
+                request.getDescription(false)
+        );
+        return new ResponseEntity<>(exceptionsResponse, HttpStatus.BAD_REQUEST);
     }
 }

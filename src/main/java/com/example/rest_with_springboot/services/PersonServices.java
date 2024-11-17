@@ -3,6 +3,7 @@ package com.example.rest_with_springboot.services;
 import com.example.rest_with_springboot.DTO.V1.PersonDTO;
 import com.example.rest_with_springboot.DTO.V2.PersonDTOV2;
 import com.example.rest_with_springboot.controller.PersonController;
+import com.example.rest_with_springboot.exceptions.RequiredIsNullException;
 import com.example.rest_with_springboot.exceptions.ResourceNotFoundException;
 import com.example.rest_with_springboot.mapper.DozerMapper;
 import com.example.rest_with_springboot.mapper.custom.PersonMapper;
@@ -55,6 +56,9 @@ public class PersonServices {
 
 
     public PersonDTO create(PersonDTO person) {
+        if (person == null) {
+            throw new RequiredIsNullException();
+        }
         logger.info("Creating one person model");
 
         var entity = DozerMapper.parseObject(person, PersonModel.class  );
@@ -65,6 +69,9 @@ public class PersonServices {
     }
 
     public PersonDTOV2 createV2(PersonDTOV2 person) {
+        if (person == null) {
+            throw new RequiredIsNullException();
+        }
         logger.info("Creating one person mode with v2");
 
         var entity = mapper.convertDTOToEntity(person );
@@ -74,6 +81,9 @@ public class PersonServices {
     }
 
     public PersonDTO update(PersonDTO person) {
+        if (person == null) {
+            throw new RequiredIsNullException();
+        }
         logger.info("Updating one person model");
 
         var entity = repository.findById(person.getKey()).orElseThrow(() -> new ResourceNotFoundException("id not found"));
