@@ -2,6 +2,7 @@ package com.example.rest_with_springboot.unitests.mockito.services;
 
 
 import com.example.rest_with_springboot.DTO.V1.PersonDTO;
+import com.example.rest_with_springboot.exceptions.RequiredIsNullException;
 import com.example.rest_with_springboot.model.PersonModel;
 import com.example.rest_with_springboot.repositories.PersonRepositories;
 import com.example.rest_with_springboot.services.PersonServices;
@@ -15,6 +16,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -84,6 +86,19 @@ public class PersonServicesTest {
     }
 
     @Test
+        //@MockitoSettings(strictness = Strictness.LENIENT)
+    void testCreateWithNullPerson(){
+        Exception exception = assertThrows(RequiredIsNullException.class, () -> {
+            service.create(null);
+        });
+
+        String expectedMessage = "It is not allowed to persisted a null object!";
+        String actualMessage = exception.getMessage();
+
+        assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    @Test
     void testUpdate(){
         PersonModel entity = input.mockEntity(1);
         entity.setId(1L);
@@ -109,11 +124,48 @@ public class PersonServicesTest {
     }
 
     @Test
+        //@MockitoSettings(strictness = Strictness.LENIENT)
+    void testUpdateWithNullPerson(){
+        Exception exception = assertThrows(RequiredIsNullException.class, () -> {
+            service.update(null);
+        });
+
+        String expectedMessage = "It is not allowed to persisted a null object!";
+        String actualMessage = exception.getMessage();
+
+        assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    @Test
     void testDelete(){
         PersonModel entity = input.mockEntity(1);
         entity.setId(1L);
         when(repository.findById(1L)).thenReturn(Optional.of(entity));
         service.delete(1L);
+
+
+    }
+
+    @Test
+    void testFindAll(){
+        List<PersonModel> listEntity = input.mockEntityList();
+
+        when(repository.findAll()).thenReturn(listEntity);
+        var people = service.findAll();
+
+        assertNotNull(people);
+        assertEquals(14, people.size());
+
+        var personOne = people.get(1);
+
+        assertNotNull(personOne);
+        assertNotNull(personOne.getKey());
+        assertNotNull(personOne.getLinks());
+        System.out.println(personOne.toString());
+        assertTrue(personOne.toString().contains("links: [</person/1>;rel=\"self\"]"));
+        assertEquals("First Name Test1", personOne.getName());
+        assertEquals("Addres Test1", personOne.getAddress());
+        assertEquals("Female", personOne.getGender());
 
 
     }
